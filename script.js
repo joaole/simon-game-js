@@ -20,6 +20,9 @@ let playerOrder = [];
 let score = 0;
 let isPlayerTurn = false;
 let gameOn = false;
+let flashDuration = 400;
+let speedBriefPause = 700;
+let speedPauseBetweenColors = 200;
 
 /**
  * Creates a delay for a specified number of milliseconds.
@@ -39,6 +42,9 @@ function startGame() {
   scoreDisplay.textContent = `Score: ${score}`;
   startButton.disabled = true;
   startButton.style.display = 'none';
+  flashDuration = 400;
+  speedBriefPause = 700;
+  speedPauseBetweenColors = 200;
 
   nextRound();
 }
@@ -63,15 +69,15 @@ function nextRound() {
  */
 function activateButton(color) {
   const button = colorButtons[color];
-  
+
   return new Promise(resolve => {
     button.classList.add('lit');
-    
+
     setTimeout(() => {
       button.classList.remove('lit');
       // A short delay before resolving to allow separation between sounds
       setTimeout(() => resolve(), 100);
-    }, 350); // Flash time reduced for a snappier feel
+    }, flashDuration);
   });
 }
 
@@ -83,7 +89,7 @@ async function playSequence() {
 
   for (const color of order) {
     await activateButton(color);
-    await sleep(200); // A short pause between colors
+    await sleep(speedPauseBetweenColors); // A short pause between colors
   }
 
   isPlayerTurn = true; // Allow player input after the sequence is shown
@@ -115,6 +121,27 @@ function checkOrder() {
   if (playerOrder.length === order.length) {
     score++;
     scoreDisplay.textContent = `Score: ${score}`;
+
+    // Increase speed every 3 points
+    if (score % 3 === 0 && flashDuration > 100) {
+      flashDuration -= 50;
+    }
+
+    // Increase speedBriefPause every 3 points
+    if (score % 3 === 0 && speedBriefPause > 325) {
+      speedBriefPause -= 75;
+    }
+
+    // increase speedPauseBetweenColors every 3 points
+    if (score % 3 === 0 && speedPauseBetweenColors > 150) {
+      speedPauseBetweenColors -= 10;
+    }
+
+
+  console.log(`Current flashDuration: ${flashDuration}ms`);
+  console.log(`Current speedPauseBetweenColors: ${speedPauseBetweenColors}ms`);
+  console.log(`Current speedBriefPause: ${speedBriefPause}ms`);
+
     isPlayerTurn = false; // Disable input while the next sequence plays
     setTimeout(nextRound, 1200); // Give a longer pause before the next round
   }
