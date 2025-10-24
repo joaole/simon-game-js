@@ -4,6 +4,9 @@ const yellowBtn = document.getElementById("yellow");
 const blueBtn = document.getElementById("blue");
 const startButton = document.getElementById("startButton");
 const scoreDisplay = document.getElementById("score");
+const highScoreDisplay = document.getElementById("highScore");
+
+
 
 const colorButtons = {
   green: greenBtn,
@@ -18,6 +21,8 @@ const colors = ["green", "red", "yellow", "blue"];
 let order = [];
 let playerOrder = [];
 let score = 0;
+let highScore = localStorage.getItem('highScore') || 0;
+highScoreDisplay.textContent = `High Score: ${highScore}`;
 let isPlayerTurn = false;
 let gameOn = false;
 let flashDuration = 400;
@@ -96,10 +101,23 @@ async function playSequence() {
 }
 
 /**
+ *  Check and incresa de highScore if needed
+ */
+function handleHighScore(score) {
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem('highScore', highScore);
+    highScoreDisplay.textContent = `High Score: ${highScore}`;
+    alert('New Record!');
+  }
+}
+
+/**
  * Ends the game and displays the final score.
  */
 function gameOver() {
   alert(`Game Over! Your final score was: ${score}`);
+  handleHighScore(score);
   gameOn = false;
   startButton.disabled = false;
   startButton.style.display = 'block';

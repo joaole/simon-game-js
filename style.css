@@ -62,8 +62,8 @@ h1 {
     transform: translate(-50%, -50%);
     background-color: #ecf0f1;
     color: #2c3e50;
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -95,4 +95,10 @@ h1 {
     margin-top: 15px;
     font-size: 1.1em;
     font-weight: bold;
+}
+
+#highScore {
+    margin-top: 5px;
+    font-size: 1em;
+    font-weight: 500;
 }
