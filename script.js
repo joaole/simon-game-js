@@ -6,8 +6,6 @@ const startButton = document.getElementById("startButton");
 const scoreDisplay = document.getElementById("score");
 const highScoreDisplay = document.getElementById("highScore");
 
-
-
 const colorButtons = {
   green: greenBtn,
   red: redBtn,
@@ -21,7 +19,7 @@ const colors = ["green", "red", "yellow", "blue"];
 let order = [];
 let playerOrder = [];
 let score = 0;
-let highScore = localStorage.getItem('highScore') || 0;
+let highScore = localStorage.getItem("highScore") || 0;
 highScoreDisplay.textContent = `High Score: ${highScore}`;
 let isPlayerTurn = false;
 let gameOn = false;
@@ -46,7 +44,7 @@ function startGame() {
   playerOrder = [];
   scoreDisplay.textContent = `Score: ${score}`;
   startButton.disabled = true;
-  startButton.style.display = 'none';
+  startButton.style.display = "none";
   flashDuration = 400;
   speedBriefPause = 700;
   speedPauseBetweenColors = 200;
@@ -60,7 +58,7 @@ function startGame() {
 function nextRound() {
   isPlayerTurn = false;
   playerOrder = [];
-  
+
   const randomColor = colors[Math.floor(Math.random() * 4)];
   order.push(randomColor);
 
@@ -75,11 +73,11 @@ function nextRound() {
 function activateButton(color) {
   const button = colorButtons[color];
 
-  return new Promise(resolve => {
-    button.classList.add('lit');
+  return new Promise((resolve) => {
+    button.classList.add("lit");
 
     setTimeout(() => {
-      button.classList.remove('lit');
+      button.classList.remove("lit");
       // A short delay before resolving to allow separation between sounds
       setTimeout(() => resolve(), 100);
     }, flashDuration);
@@ -101,14 +99,14 @@ async function playSequence() {
 }
 
 /**
- *  Check and incresa de highScore if needed
+ *  Check and increase highScore if needed
  */
 function handleHighScore(score) {
   if (score > highScore) {
     highScore = score;
-    localStorage.setItem('highScore', highScore);
+    localStorage.setItem("highScore", highScore);
     highScoreDisplay.textContent = `High Score: ${highScore}`;
-    alert('New Record!');
+    return true;
   }
 }
 
@@ -116,11 +114,17 @@ function handleHighScore(score) {
  * Ends the game and displays the final score.
  */
 function gameOver() {
-  alert(`Game Over! Your final score was: ${score}`);
-  handleHighScore(score);
+  let newHighScore = handleHighScore(score);
+  alert(
+    `Game Over! ${
+      newHighScore
+        ? `New High Score! Score: ${score}`
+        : `Your final score was: ${score}`
+    } `
+  );
   gameOn = false;
   startButton.disabled = false;
-  startButton.style.display = 'block';
+  startButton.style.display = "block";
 }
 
 /**
@@ -128,7 +132,7 @@ function gameOver() {
  */
 function checkOrder() {
   const lastClickIndex = playerOrder.length - 1;
-  
+
   // Check if the last clicked color is correct
   if (playerOrder[lastClickIndex] !== order[lastClickIndex]) {
     gameOver();
@@ -155,11 +159,6 @@ function checkOrder() {
       speedPauseBetweenColors -= 10;
     }
 
-
-  console.log(`Current flashDuration: ${flashDuration}ms`);
-  console.log(`Current speedPauseBetweenColors: ${speedPauseBetweenColors}ms`);
-  console.log(`Current speedBriefPause: ${speedBriefPause}ms`);
-
     isPlayerTurn = false; // Disable input while the next sequence plays
     setTimeout(nextRound, 1200); // Give a longer pause before the next round
   }
@@ -181,8 +180,8 @@ function handlePlayerClick(event) {
 
 // --- Event Listeners Setup ---
 
-startButton.addEventListener('click', startGame);
-greenBtn.addEventListener('click', handlePlayerClick);
-redBtn.addEventListener('click', handlePlayerClick);
-yellowBtn.addEventListener('click', handlePlayerClick);
-blueBtn.addEventListener('click', handlePlayerClick);
+startButton.addEventListener("click", startGame);
+greenBtn.addEventListener("click", handlePlayerClick);
+redBtn.addEventListener("click", handlePlayerClick);
+yellowBtn.addEventListener("click", handlePlayerClick);
+blueBtn.addEventListener("click", handlePlayerClick);
