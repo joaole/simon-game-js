@@ -2,6 +2,19 @@ const greenBtn = document.getElementById("green");
 const redBtn = document.getElementById("red");
 const yellowBtn = document.getElementById("yellow");
 const blueBtn = document.getElementById("blue");
+
+const greenSound = new Audio("sounds/green.mp3");
+const redSound = new Audio("sounds/red.mp3");
+const yellowSound = new Audio("sounds/yellow.mp3");
+const blueSound = new Audio("sounds/blue.mp3");
+const wrongSound = new Audio("sounds/wrong.mp3");
+
+const sounds = {
+  green: greenSound,
+  red: redSound,
+  yellow: yellowSound,
+  blue: blueSound,
+};
 const startButton = document.getElementById("startButton");
 const scoreDisplay = document.getElementById("score");
 const highScoreDisplay = document.getElementById("highScore");
@@ -49,6 +62,10 @@ function startGame() {
   speedBriefPause = 700;
   speedPauseBetweenColors = 200;
 
+  // Play a sound at the beginning of the game
+  const startSound = sounds.green.cloneNode();
+  startSound.play();
+
   nextRound();
 }
 
@@ -72,9 +89,12 @@ function nextRound() {
  */
 function activateButton(color) {
   const button = colorButtons[color];
+  const sound = sounds[color];
 
   return new Promise((resolve) => {
     button.classList.add("lit");
+    const soundClone = sound.cloneNode();
+    soundClone.play();
 
     setTimeout(() => {
       button.classList.remove("lit");
@@ -115,6 +135,7 @@ function handleHighScore(score) {
  */
 function gameOver() {
   let newHighScore = handleHighScore(score);
+  wrongSound.play();
   alert(
     `Game Over! ${
       newHighScore
